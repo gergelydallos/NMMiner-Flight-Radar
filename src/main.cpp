@@ -489,9 +489,12 @@ void setup() {
   // non-standardly: TFT_eSPI's own rotation-1 MADCTL renders transposed and
   // wrapped. setRotation(1) is still needed for the library's 320x240 logical
   // frame, but the hardware register must then be overridden with raw 0x80
-  // (found by brute-force diagnostic, 2026-07-03 — see DISPLAY_DEBUG_NOTES.md).
-  // In this state geometry, colors, and channel order are all correct with no
-  // inversion. If setRotation() is ever called again, re-apply the override.
+  // (found by brute-force diagnostic over all MADCTL bytes). In this state
+  // geometry, colors, and channel order are all correct with no inversion.
+  // On a standard CYD panel, delete the two override lines below. If some
+  // other clone renders wrong, try the other orientation bytes (0x00, 0x20,
+  // 0x40, 0x60, 0xA0, 0xC0, 0xE0) here instead of 0x80.
+  // If setRotation() is ever called again at runtime, re-apply the override.
   tft.setRotation(1);
   tft.writecommand(TFT_MADCTL);
   tft.writedata(0x80);

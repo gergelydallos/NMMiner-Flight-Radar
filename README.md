@@ -5,7 +5,7 @@ NMMiner/NerdMiner solo-mining gadgets) into an old-school sweep radar that
 shows **live air traffic around your home** — no receiver antenna, no
 soldering, no account, no API keys.
 
-<!-- Add a photo or GIF of your radar here! -->
+![Flight radar demo](docs/demo.gif)
 
 A green radar beam sweeps the screen once every 4 seconds. Aircraft within
 your configured range appear as little airplane silhouettes pointing in their
@@ -38,12 +38,14 @@ One board, nothing else:
 > **Note on display variants:** these boards ship with several panel clones.
 > This project was built on a unit with a **TPM408-2.8** panel whose MADCTL
 > register decodes non-standardly; the firmware works around it by overriding
-> the rotation register directly (`tft.writedata(0x80)` after
-> `tft.setRotation(1)` in `setup()`). If your screen shows mirrored, rotated,
-> or wrapped output, see [DISPLAY_DEBUG_NOTES.md](DISPLAY_DEBUG_NOTES.md) for
-> the full diagnosis story and a brute-force diagnostic approach that will
-> find your panel's correct value. On a standard CYD panel you can likely
-> just delete the two override lines.
+> the rotation register directly (`tft.writecommand(TFT_MADCTL)` +
+> `tft.writedata(0x80)` right after `tft.setRotation(1)` in `setup()`).
+> On a standard CYD panel you can likely just delete those two override
+> lines. If your screen shows mirrored, rotated, or wrapped output with some
+> other panel clone, try the other MADCTL orientation bytes in place of
+> `0x80` (0x00, 0x20, 0x40, 0x60, 0xA0, 0xC0, 0xE0) until the picture is
+> correct — a small sketch that cycles them on a button press makes this a
+> two-minute job.
 
 ## Building & flashing
 
